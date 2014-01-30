@@ -16,10 +16,10 @@ to get SST data file:
 
 3) Uncomment the appropriate backend::
 
-   plt.switch_backend('MacOSX') #interactive
-   #plt.switch_backend('Qt4Agg') #interactive
-   #plt.switch_backend('Agg') #batch
+     plt.switch_backend('MacOSX') #interactive
+     #plt.switch_backend('Qt4Agg') #interactive
+     #plt.switch_backend('Agg') #batch
 
 4) run the script, which should produce the files *sst_pacific.png* and *sst_average.png*::
 
-   python plot_mercator.py
+     python plot_mercator.py
