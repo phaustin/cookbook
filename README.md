@@ -1,4 +1,0 @@
-cookbook
-========
-
-code demos
