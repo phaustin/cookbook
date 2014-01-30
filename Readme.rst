@@ -1,7 +1,7 @@
 cookbook
 ========
 
-plot_mercater.py
+plot_mercator.py
 ----------------
 
 to get SST data file:
