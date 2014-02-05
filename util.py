@@ -1,8 +1,6 @@
 from __future__ import division
 import collections
 import numpy as np
-import numpy.ma as ma
-import matplotlib.pyplot as plt
 
 def copy_attrs(varin,varout):
     """copy attributes from ncvar
@@ -10,47 +8,19 @@ def copy_attrs(varin,varout):
     for attr_name in varin.ncattrs():
         varout.setncattr(attr_name,varin.getncattr(attr_name))
 
-def find_index_sorted(vec_vals,target,ascend=True):
+def find_index(vec_vals,target):
     """
-       given a sorted list of values, find the first index 
-       greater than or equal to the target     
-       example:  find_index_sorted(lats,120.)
-          will return the first index in the lats vector >= 120
+       list of values, find the first index 
+       closest to the target
+       examples:  find_index(lats,120.)
+                  find_index(lats,[120.,180.])
     """
-    target=np.array(target)  #turn list or scalar in to numpy vector
+    target=np.atleast_1d(target)  #turn scalar into iterable, no op if already array
+    vec_vals=np.array(vec_vals)
     index_list=[]
     for item in target:
-        if ascend:
-            hit=vec_vals >= item
-        else:
-            hit=vec_vals <= item
-        first_index=np.where(hit)[0][0]
+        first_index=np.argmin(np.abs(vec_vals - item))
         index_list.append(first_index)
-    return index_list
-
-        
-def find_index_unsorted(vec_vals,target,tol=1.):
-    """
-      usage: lat_slice=find_index(lats,[lowlat,highlat])
-    
-      given a 1-D numpy array vec_vals, find the
-      index that is within tol of target
-
-      If vec_vals is sorted in ascending order, use
-      find_index_sorted
-    """
-    target=np.array(target) #make sure it's iterable
-    index_list=[]
-    for item in target:
-        hit=(np.abs(vec_vals - item) < tol)
-        index_vals=np.where(hit)[0]
-        if len(index_vals) > 2:
-            raise Exception('trouble in find_index, found > 2 vals')
-        elif len(index_vals) == 0:
-            raise Exception('trouble in find_index, no hits')
-        else:
-            index_vals=index_vals[0]
-        index_list.append(index_vals)
     return index_list
 
 def box_average_from_files(nc_var,nc_area,var_name,press_lev,month_slice,lat_slice,lon_slice):
@@ -212,9 +182,9 @@ def make_lat_lon_slice(nc_file,corners=None):
         lat_slice=[0,lat_nc.shape[0]]
         lon_slice=[0,lon_nc.shape[0]]
     else:
-        lat_slice=find_index_sorted(full_lats,[corners.ll.lat,corners.ur.lat])
+        lat_slice=find_index(full_lats,[corners.ll.lat,corners.ur.lat])
         lat_slice[1]+=1
-        lon_slice=find_index_sorted(full_lons,[corners.ll.lon,corners.ur.lon])
+        lon_slice=find_index(full_lons,[corners.ll.lon,corners.ur.lon])
         lon_slice[1]+=1
     lat_slice=slice(*lat_slice)
     lon_slice=slice(*lon_slice)
@@ -274,5 +244,7 @@ def my_namedtuple(typename, field_names, verbose=False,
 
     return namespace['subclass']  # subclass object created
     
-
+if __name__=="__main__":
+    test()
+    
     
