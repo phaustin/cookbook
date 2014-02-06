@@ -149,8 +149,8 @@ def make_plot(the_lons,the_lats,the_var,fignum=1,vmin=290,vmax=305):
     warm pool.  Return the figure, axis, and basemap for additional
     plotting
     
-Parameters
-----------
+    Parameters
+    ----------
 
     the_lons: 1d ndarray -- vector of longitudes
     the_lats: 1d ndarray -- vector of lattitudes
