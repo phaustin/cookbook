@@ -17,13 +17,32 @@ import datetime as dt
 
 def find_index(vec_vals,target):
     """
-       list of values, find the first index 
-       closest to the target
-       examples:  find_index(lats,120.)
-                  find_index(lats,[120.,180.])
+
+    returns the first index of vec_vals that contains the value
+    closest to target.
+
+    Parameters
+    ----------
+
+    vec_vals: list or 1-d array
+    target:   list 1-d array or scalar
+
+
+    Returns
+    -------
+
+    list of len(target) containing the index idx such that
+    vec_vals[idx] is closest to each item in target
+
+    Example
+    -------
+
+    left_lon,right_lon=find_index(the_lons,[120.,140.])
+
     """
-    target=np.atleast_1d(target)  #turn scalar into iterable, no op if already array
-    vec_vals=np.array(vec_vals)
+  
+    target=np.atleast_1d(target)  #turn scalar into iterable, no-op if already array
+    vec_vals=np.array(vec_vals)  #turn list into ndarray or no-op if already array
     index_list=[]
     for item in target:
         first_index=np.argmin(np.abs(vec_vals - item))
@@ -34,41 +53,41 @@ def find_index(vec_vals,target):
 def get_var_2D(file_name,var_name,corners=None,start_date=None,stop_date=None,
                 time_name='time',lat_name='lat',lon_name='lon'):
     """
-        Given the filename of 
-       the name of a variable and op
-       
-          0912.nc return an open
-          netCDF4 Datset for the file
 
-        Parameters
-        ----------
+    Given a netcdf file containing a [time,lat,lon] variable with name
+    var_name, return a slice with values
+    [start_date:stop_date,corners.ll.lat:corners.ur.lat,corners.ll.lon:corners.ur.lon]
 
-        filename: str --  name of netcdf (possible including full path) of netcdf file
-        varname:  str --  name of [time,lat,lon] netcdf variable
-        corners:  optional, my_namedtuple -- Box object with latlon corner points
-                     if None, defaults to all lats, all lons
-        start_date: optional, datetime  -- python datetime object to start slice
-                     if None, defaults to time index 0
-        stop_date: optional, datetime  -- python datetime object to end slice
-                     if None, defaults to last time value
-        
-    
-        Returns
-        -------
+    Parameters
+    ----------
 
-        tuple containing:
+    filename: str --  name of netcdf (possible including full path) of netcdf file
+    varname:  str --  name of [time,lat,lon] netcdf variable (.eg. tos)
+    corners:  optional, my_namedtuple -- Box object with latlon corner points
+                 if None, defaults to all lats, all lons
+    start_date: optional, datetime  -- python datetime object to start slice
+                 if None, defaults to time index 0
+    stop_date: optional, datetime  -- python datetime object to end slice
+                 if None, defaults to last time value
 
-        data_nc: netCDF4 Dataset
-        var_nc:  netCDF4 variable
-        the_times: np.array of datetimes
-        the_lats: 1-D np.array of latitudes
-        the_lons: 1_D np.array of longitudes
-        vararray: 2:D np.array with variable slice
-    
-        Example
-        -------
+    Returns
+    -------
 
-    
+    tuple containing:
+
+    data_nc: netCDF4 Dataset
+    var_nc:  netCDF4 variable
+    the_times: np.array of datetimes for slice
+    the_lats: 1-D np.array of latitudes for slice
+    the_lons: 1_D np.array of longitudes for slice
+    vararray: 2:D np.array with variable slice
+
+    Example
+    -------
+
+    in_file='tos_AMSRE_L3_v7_200206-201012.nc'
+    options=dict(corners=warmpool,start_date=dt.datetime(2003,4,1),stop_date=dt.datetime(2006,3,1))
+    data_nc,var_nc,the_times,the_lats,the_lons,sst=get_var_2D(in_file,'tos',**options)
     """      
     data_nc=Dataset(file_name)
     var_nc=data_nc.variables[var_name]
@@ -126,6 +145,35 @@ def get_var_2D(file_name,var_name,corners=None,start_date=None,stop_date=None,
     return data_nc,var_nc,the_times,the_lats,the_lons,var_array
 
 def make_plot(the_lons,the_lats,the_var,fignum=1,vmin=290,vmax=305):
+    """
+
+    Make a minimal pcolormexh plot of a [lat,lon] field centered in the tropical
+    warm pool.  Return the figure, axis, and basemap for additional
+    plotting
+    
+Parameters
+----------
+
+    the_lons: 1d ndarray -- vector of longitudes
+    the_lats: 1d ndarray -- vector of lattitudes
+    the_var:  2d ndarray of shape [len(the_lons),len(the_lats)] -- field to plot
+    vmin: scalar (optional) -- minimum value on colorbar
+    vmax: scalar (option)  -- maximum value on colorbar
+
+    Returns
+    -------
+
+        fig:  figure object
+        ax:   axis object
+        map:  Basemap object
+
+    Example
+    -------
+
+        fig,ax,map=make_plot(the_lons,the_lats,sst_avg,vmin=301,vmax=303.5)
+
+    """
+ 
     fig=plt.figure(fignum)
     fig.clf()
     ax1=fig.add_subplot(111)
@@ -199,5 +247,5 @@ if __name__=="__main__":
 
     plt.show()
  
-
+ 
 
