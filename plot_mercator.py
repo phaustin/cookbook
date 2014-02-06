@@ -11,7 +11,6 @@ import netCDF4 as nc4
 from mpl_toolkits.basemap import Basemap
 from matplotlib.colors import Normalize
 from matplotlib import cm
-from util import find_index
 import datetime as dt
 
 def find_index(vec_vals,target):
