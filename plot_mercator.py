@@ -1,5 +1,5 @@
 """
-   plot an SST map from a monthly CFMIP5 ts file
+   plot an average tropical warm pool  SST map from a monthly AMSR-E tos file
 """
 from matplotlib import pyplot as plt
 plt.switch_backend('MacOSX') #interactive
@@ -12,7 +12,6 @@ from mpl_toolkits.basemap import Basemap
 from matplotlib.colors import Normalize
 from matplotlib import cm
 from util import find_index
-from constants import tropics as tp
 import datetime as dt
 
 def find_index(vec_vals,target):
