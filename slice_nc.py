@@ -144,7 +144,7 @@ def test_get_var_2D():
     options=dict(corners=wp,start_date=dt.datetime(2003,4,1),stop_date=dt.datetime(2006,3,1))
     data_nc,var_nc,the_times,the_lats,the_lons,sst=get_var_2D(in_file,'tos',**options)
     answer=\
-      [[[301.8192138671875,301.8794860839844,301.97021484375],\
+      [[[302.8192138671875,301.8794860839844,301.97021484375],\
         [301.93927001953125,302.00830078125,301.9566345214844],\
         [302.3489074707031,302.3004455566406,302.2830810546875]],\
       [[301.0838317871094,301.2699279785156,301.2352600097656],\
@@ -178,7 +178,7 @@ if __name__=="__main__":
     #     exit=False    keep running (needed to continue ipython
     #                   session
     nose.runmodule(argv=[__file__,'-vvs','-x','--pdb','--with-doctest'],exit=False)
-
+    print __file__
  
  
 
