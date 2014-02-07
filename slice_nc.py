@@ -78,9 +78,13 @@ def get_var_2D(file_name,var_name,corners=None,start_date=None,stop_date=None,
     Example
     -------
 
-    in_file='tos_AMSRE_L3_v7_200206-201012.nc'
-    options=dict(corners=warmpool,start_date=dt.datetime(2003,4,1),stop_date=dt.datetime(2006,3,1))
-    data_nc,var_nc,the_times,the_lats,the_lons,sst=get_var_2D(in_file,'tos',**options)
+    >>> from constants import warm_pool
+    >>> in_file='tos_AMSRE_L3_v7_200206-201012.nc'
+    >>> options=dict(corners=warm_pool,start_date=dt.datetime(2003,4,1),stop_date=dt.datetime(2006,3,1))
+    >>> data_nc,var_nc,the_times,the_lats,the_lons,sst=get_var_2D(in_file,'tos',**options)
+    >>> print(["%6.3f" % item for item in sst[0,0,:4]])
+    ['301.819', '301.879', '301.970', '302.070']
+
     """      
     data_nc=Dataset(file_name)
     var_nc=data_nc.variables[var_name]
